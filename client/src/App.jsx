@@ -27,6 +27,7 @@ function App() {
 
       if (data.success) {
         const output = data.result.stdout || data.result.stderr || "No output.";
+        console.log("Execution Result:", output);
         alert(`💡 Code Execution Result:\n\n${output}`);
       } else {
         alert("❌ Execution failed. Try again.");
