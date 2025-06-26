@@ -41,8 +41,13 @@ function InterviewPage() {
       const data = await response.json();
 
       if (data.success) {
-        const outputText = data.result.stdout || data.result.stderr || "No output.";
+        // Get output from stdout, stderr, or compile_output
+        const outputText = data.result.stdout || 
+                          data.result.stderr || 
+                          data.result.compile_output || 
+                          `Status: ${data.result.status?.description || 'Unknown'}\nNo output generated.`;
         setOutput(outputText);
+        console.log('📤 Code execution result:', data.result); // Debug log
 
         // 2. Then, get AI feedback (optional)
         try {
@@ -69,11 +74,14 @@ function InterviewPage() {
           setFeedback("❌ AI feedback unavailable, but code executed successfully!");
         }
       } else {
-        alert("Code execution failed. Please try again.");
+        console.error('❌ Server returned failure:', data);
+        setOutput(`Error: ${data.error || 'Code execution failed'}`);
+        alert(`Code execution failed: ${data.error || 'Unknown error'}`);
       }
     } catch (err) {
       console.error("❌ Error during evaluation:", err);
-      alert("Something went wrong during submission.");
+      setOutput(`Network Error: ${err.message}`);
+      alert("Network error during submission. Check console for details.");
     }
   };
 
@@ -143,7 +151,7 @@ function InterviewPage() {
      <button
         onClick={handleSubmit}
         className="bg-green-600 text-white px-6 py-3 mt-4 rounded shadow hover:bg-green-700 transition"
-        disabled={!question || !code.trim()}>
+        disabled={!question || !code.trim() || code.trim() === '// Write your code here...'}>
         Submit Solution
     </button>
     </div>
