@@ -35,7 +35,7 @@ exports.evaluateCode = async (req, res) => {
     // Poll result with proper error handling
     const getResult = async (attempts = 0) => {
       try {
-        const res = await axios.get(`https://judge0-ce.p.rapidapi.com/submissions/${token}`, {
+        const res = await axios.get(`https://judge0-ce.p.rapidapi.com/submissions/${token}?base64_encoded=true`, {
           headers: {
             'X-RapidAPI-Key': process.env.JUDGE0_API_KEY,
             'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com',
@@ -44,6 +44,17 @@ exports.evaluateCode = async (req, res) => {
         
         const result = res.data;
         console.log('📥 Result received:', result.status);
+        
+        // Decode base64 encoded fields
+        if (result.stdout) {
+          result.stdout = Buffer.from(result.stdout, 'base64').toString('utf8');
+        }
+        if (result.stderr) {
+          result.stderr = Buffer.from(result.stderr, 'base64').toString('utf8');
+        }
+        if (result.compile_output) {
+          result.compile_output = Buffer.from(result.compile_output, 'base64').toString('utf8');
+        }
         
         // If still processing, wait and try again (max 10 attempts = 20 seconds)
         if (result.status.id <= 2 && attempts < 10) {

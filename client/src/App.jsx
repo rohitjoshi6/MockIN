@@ -4,12 +4,17 @@ import Editor from "@monaco-editor/react";
 function App() {
   const [code, setCode] = useState(`// Write your code here\n#include <iostream>\nusing namespace std;\nint main() {\n  cout << "Hello MockIN!" << endl;\n  return 0;\n}`);
   const [explanation, setExplanation] = useState("");
+  const [output, setOutput] = useState("");
+  const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
     setLoading(true);
+    setOutput("");
+    setFeedback("");
 
     try {
+      // 1. Evaluate code using Judge0
       const response = await fetch("/api/evaluate", {
         method: "POST",
         headers: {
@@ -17,25 +22,52 @@ function App() {
         },
         body: JSON.stringify({
           code,
-          language: "cpp", // can be made dynamic later
-          stdin: "",       // optional input
+          language: "cpp",
+          stdin: "",
         }),
       });
 
       const data = await response.json();
-      setLoading(false);
 
       if (data.success) {
-        const output = data.result.stdout || data.result.stderr || "No output.";
-        console.log("Execution Result:", output);
-        alert(`💡 Code Execution Result:\n\n${output}`);
+        const result = data.result.stdout || data.result.stderr || "No output.";
+        setOutput(result);
+        console.log("Execution Result:", result);
+
+        // 2. Send explanation to OpenAI for feedback
+        const feedbackResponse = await fetch("/api/feedback", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            code,
+            explanation,
+            problem: "Sample Problem: Reverse a linked list", // replace with actual
+          }),
+        });
+
+        const feedbackData = await feedbackResponse.json();
+        if (feedbackData.success) {
+          setFeedback(feedbackData.feedback);
+        } else {
+          // Handle different error types
+          if (feedbackResponse.status === 429) {
+            setFeedback("⚠️ OpenAI quota exceeded. The AI feedback feature is temporarily unavailable due to usage limits.");
+          } else if (feedbackResponse.status === 401) {
+            setFeedback("🔑 OpenAI API key issue. Please check the server configuration.");
+          } else {
+            setFeedback(`❌ Failed to get feedback from AI: ${feedbackData.error || 'Unknown error'}`);
+          }
+        }
       } else {
-        alert("❌ Execution failed. Try again.");
+        alert("❌ Code execution failed.");
       }
     } catch (err) {
-      setLoading(false);
       console.error(err);
-      alert("Something went wrong while submitting code.");
+      alert("Something went wrong.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -76,6 +108,22 @@ function App() {
             {loading ? "Evaluating..." : "Submit Answer"}
           </button>
         </div>
+
+        {/* Code Output */}
+        {output && (
+          <div className="bg-white p-4 rounded-xl shadow border">
+            <h2 className="text-xl font-semibold text-green-700 mb-2">💡 Code Output</h2>
+            <pre className="whitespace-pre-wrap text-sm text-gray-800">{output}</pre>
+          </div>
+        )}
+
+        {/* LLM Feedback */}
+        {feedback && (
+          <div className="bg-white p-4 rounded-xl shadow border">
+            <h2 className="text-xl font-semibold text-indigo-700 mb-2">🧠 AI Feedback</h2>
+            <pre className="whitespace-pre-wrap text-sm text-gray-800">{feedback}</pre>
+          </div>
+        )}
       </div>
     </div>
   );

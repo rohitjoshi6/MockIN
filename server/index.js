@@ -20,6 +20,10 @@ app.use((req, res, next) => {
 const evaluateRoutes = require("./routes/evaluate");
 app.use("/api/evaluate", evaluateRoutes);
 
+// ✅ Feedback route
+const feedbackRoutes = require('./routes/feedback');
+app.use('/api/feedback', feedbackRoutes);
+
 // Test endpoint
 app.get("/api/test", (req, res) => {
   res.json({ message: "API is working!", timestamp: new Date().toISOString() });
