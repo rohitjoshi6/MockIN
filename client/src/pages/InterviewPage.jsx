@@ -4,6 +4,20 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import questions from '../data/neetcode150';
 
+
+function addEmojisToFeedback(feedback) {
+  return feedback
+    .replace(/(?<!❌ )(error|mistake)/gi, '❌ $1')
+    .replace(/(?<!✅ )(correct|works well|passes)/gi, '✅ $1')
+    .replace(/(?<!💡 )(optimize|can be improved|suggestion|consider)/gi, '💡 $1')
+    .replace(/(?<!🧠 )(logic|approach|idea|strategy)/gi, '🧠 $1')
+    .replace(/(?<!🔍 )(analyze|check|review)/gi, '🔍 $1')
+    .replace(/(?<!⚠️ )(edge case|be careful|watch out)/gi, '⚠️ $1')
+    .replace(/(?<!🎉 )(great job|well done|nice work)/gi, '🎉 $1')
+    .replace(/(?<!📌 )(important|note)/gi, '📌 $1');
+}
+
+
 function InterviewPage() {
   const [topic, setTopic] = useState('');
   const [question, setQuestion] = useState(null);
@@ -180,7 +194,7 @@ function InterviewPage() {
             </div>
           ) : (
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {feedback || 'No feedback yet.'}
+              {addEmojisToFeedback(feedback) || 'No feedback yet.'}
             </ReactMarkdown>
           )}
         </div>

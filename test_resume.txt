@@ -1,0 +1,14 @@
+John Doe
+Software Engineer
+
+Experience:
+- 3 years at Google as Software Engineer working on search algorithms
+- 2 years at Microsoft as Frontend Developer on Office suite
+- Led a team of 5 developers on a React project
+- Implemented microservices architecture
+
+Skills:
+- JavaScript, React, Node.js
+- Python, Java
+- AWS, Docker
+- Team Leadership
