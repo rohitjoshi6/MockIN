@@ -5,44 +5,54 @@ function LandingPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] text-white flex items-center justify-center px-6">
-      <div className="text-center space-y-10 animate-fade-up">
+    <div className="min-h-screen bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] text-white flex items-center justify-center px-6 py-12">
+      <div className="text-center space-y-12 animate-fade-up">
         {/* Title */}
-        <h1 className="text-5xl md:text-7xl font-extrabold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-violet-600 drop-shadow-lg">
-          MockIN
+        <h1 className="text-6xl md:text-7xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-violet-600 text-transparent bg-clip-text drop-shadow-[0_0_20px_rgba(255,255,255,0.25)]">
+          Mock<span className="text-white">IN</span>
         </h1>
 
         {/* Subtitle */}
-        <p className="text-lg md:text-2xl text-gray-300 font-light max-w-2xl mx-auto">
-          Elevate your interview prep with real-time code evaluation and AI-driven behavioral practice.
+        <p className="text-xl md:text-2xl text-gray-300 font-light max-w-2xl mx-auto leading-relaxed">
+          Your all-in-one AI-powered coding and behavioral interview simulator.
         </p>
 
-        {/* CTA Options */}
-        <div className="flex flex-col md:flex-row justify-center gap-8">
-          {/* Coding CTA */}
+        {/* CTA Cards */}
+        <div className="flex flex-col md:flex-row justify-center gap-10 mt-6">
+          {/* Coding Practice Card */}
           <div
             onClick={() => navigate('/interview')}
-            className="group bg-white/10 hover:bg-white/20 border border-white/20 rounded-2xl p-6 w-72 cursor-pointer backdrop-blur-xl shadow-lg hover:shadow-fuchsia-400/40 transition-all duration-300 ease-in-out"
+            className="group relative w-80 p-6 rounded-3xl border border-white/20 bg-white/10 backdrop-blur-md shadow-xl cursor-pointer transition-all hover:scale-105 hover:shadow-cyan-400/30"
           >
-            <FaCode className="text-4xl mb-4 text-cyan-400 group-hover:scale-110 transition-transform" />
-            <h2 className="text-xl font-semibold">Start Coding Practice</h2>
-            <p className="text-sm text-gray-300 mt-2">
-              Solve top DSA problems and get instant AI feedback.
-            </p>
+            {/* Glow Effect */}
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 blur opacity-20 group-hover:opacity-40 transition-all duration-500 rounded-3xl" />
+            <div className="relative z-10 space-y-3">
+              <FaCode className="text-5xl text-cyan-300 mx-auto group-hover:scale-110 transition-transform duration-200" />
+              <h2 className="text-2xl font-semibold">Start Coding Practice</h2>
+              <p className="text-sm text-gray-300 leading-relaxed">
+                Solve top DSA problems and get instant AI-powered feedback.
+              </p>
+            </div>
           </div>
 
-          {/* Behavioral CTA */}
+          {/* Behavioral Interview Card */}
           <div
             onClick={() => navigate('/resume')}
-            className="group bg-white/10 hover:bg-white/20 border border-white/20 rounded-2xl p-6 w-72 cursor-pointer backdrop-blur-xl shadow-lg hover:shadow-cyan-400/40 transition-all duration-300 ease-in-out"
+            className="group relative w-80 p-6 rounded-3xl border border-white/20 bg-white/10 backdrop-blur-md shadow-xl cursor-pointer transition-all hover:scale-105 hover:shadow-pink-400/30"
           >
-            <FaUserTie className="text-4xl mb-4 text-pink-400 group-hover:scale-110 transition-transform" />
-            <h2 className="text-xl font-semibold">Behavioral Interview</h2>
-            <p className="text-sm text-gray-300 mt-2">
-              Upload your resume and prepare for real-world behavioral rounds.
-            </p>
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-pink-400 via-violet-500 to-cyan-500 blur opacity-20 group-hover:opacity-40 transition-all duration-500 rounded-3xl" />
+            <div className="relative z-10 space-y-3">
+              <FaUserTie className="text-5xl text-pink-300 mx-auto group-hover:scale-110 transition-transform duration-200" />
+              <h2 className="text-2xl font-semibold">Behavioral Interview</h2>
+              <p className="text-sm text-gray-300 leading-relaxed">
+                Upload your resume and simulate real behavioral rounds.
+              </p>
+            </div>
           </div>
         </div>
+
+        {/* Footer (optional) */}
+        <p className="text-xs text-gray-400 pt-8 tracking-wide">Made with ❤️ by Rohit Joshi</p>
       </div>
     </div>
   );

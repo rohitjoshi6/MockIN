@@ -129,44 +129,50 @@ function ResumeInterview() {
     return () => clearInterval(timerRef.current);
   }, []);
 
-  return (
-    <div className="min-h-screen bg-gray-100 px-4 py-8 text-gray-900 space-y-6">
-      <h1 className="text-3xl font-bold text-center text-indigo-700">MockIN – Behavioral Interview</h1>
+return (
+    <div className="w-full min-h-screen bg-gradient-to-br from-slate-100 to-white px-4 py-10 text-gray-900 space-y-10">
+      <h1 className="text-4xl font-extrabold text-center text-indigo-700 drop-shadow">
+        MockIN – Behavioral Interview
+      </h1>
 
       {/* Resume Upload */}
-      <div className="max-w-xl mx-auto bg-white rounded-xl shadow p-6 text-center space-y-4">
-        <label className="block cursor-pointer p-6 border-2 border-dashed border-gray-400 rounded-xl hover:border-indigo-500 transition">
+      <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-lg p-6 text-center space-y-5 border border-gray-200">
+        <label className="block cursor-pointer border-2 border-dashed border-gray-300 rounded-xl p-8 hover:border-indigo-500 transition duration-200">
           <input type="file" accept="application/pdf,text/plain" onChange={handleFileChange} hidden />
           <div className="flex flex-col items-center space-y-2">
-            <FiUploadCloud size={40} />
-            <span>{resume ? resume.name : 'Click or drag to upload resume (PDF or TXT)'}</span>
+            <FiUploadCloud size={40} className="text-indigo-500" />
+            <span className="text-gray-700 font-medium">
+              {resume ? resume.name : 'Click or drag to upload resume (PDF or TXT)'}
+            </span>
           </div>
         </label>
 
         <button
           onClick={handleGenerateQuestion}
           disabled={!resume || isGenerating}
-          className="bg-indigo-600 text-white px-5 py-2 rounded shadow hover:bg-indigo-700 disabled:bg-gray-400"
+          className="bg-indigo-600 text-white px-6 py-2 rounded-full shadow hover:bg-indigo-700 disabled:bg-gray-400 transition"
         >
-          {isGenerating ? 'Generating...' : 'Generate Question'}
+          {isGenerating ? 'Generating...' : '🎯 Generate Question'}
         </button>
       </div>
 
-      {/* Question + Mic */}
+      {/* Question Box */}
       {question && (
-        <div className="text-center space-y-4">
-          <h2 className="text-xl font-semibold">🧠 {question}</h2>
+        <div className="max-w-2xl mx-auto bg-indigo-50 border border-indigo-200 rounded-xl p-6 shadow text-center space-y-4">
+          <h2 className="text-lg font-semibold text-indigo-800">🧠 AI Behavioral Question:</h2>
+          <p className="text-gray-800 text-lg">{question}</p>
+
           {isRecording ? (
             <button
               onClick={handleStopRecording}
-              className="bg-red-600 text-white px-4 py-2 rounded-full shadow hover:bg-red-700"
+              className="bg-red-600 text-white px-5 py-2 rounded-full hover:bg-red-700 shadow transition"
             >
-              <FiMicOff className="inline mr-2" /> Stop ({recordingTime}s)
+              <FiMicOff className="inline mr-2" /> Stop Recording ({recordingTime}s)
             </button>
           ) : (
             <button
               onClick={handleStartRecording}
-              className="bg-green-600 text-white px-4 py-2 rounded-full shadow hover:bg-green-700"
+              className="bg-green-600 text-white px-5 py-2 rounded-full hover:bg-green-700 shadow transition"
             >
               <FiMic className="inline mr-2 animate-pulse" /> Start Recording
             </button>
@@ -180,22 +186,25 @@ function ResumeInterview() {
           <button
             onClick={handleEvaluate}
             disabled={isEvaluating}
-            className="bg-blue-600 text-white px-6 py-2 rounded shadow hover:bg-blue-700 disabled:bg-gray-400"
+            className="bg-blue-600 text-white px-6 py-2 rounded-full shadow hover:bg-blue-700 disabled:bg-gray-400 transition"
           >
-            {isEvaluating ? 'Evaluating...' : 'Submit Answer'}
+            {isEvaluating ? 'Evaluating...' : '🚀 Submit Answer'}
           </button>
         </div>
       )}
 
       {/* Final Output */}
       {(answer || feedback) && (
-        <div className="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow space-y-6">
-          <div>
-            <h3 className="font-semibold text-gray-800">Your Answer (transcribed):</h3>
+        <div className="w-full max-w-6xl mx-auto space-y-6">
+          {/* Answer Box */}
+          <div className="bg-white p-6 rounded-xl shadow border border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">🎤 Transcribed Answer:</h3>
             <p className="text-gray-700 whitespace-pre-wrap">{answer}</p>
           </div>
-          <div>
-            <h3 className="font-semibold text-gray-800">AI Feedback:</h3>
+
+          {/* Feedback Box */}
+          <div className="bg-yellow-50 p-6 rounded-xl shadow border border-yellow-300">
+            <h3 className="text-lg font-semibold text-yellow-800 mb-2">🧠 AI Feedback:</h3>
             <div className="prose max-w-none">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{feedback}</ReactMarkdown>
             </div>

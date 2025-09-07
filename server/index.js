@@ -33,6 +33,7 @@ app.get("/", (req, res) => {
   res.send("MockIN backend running 🚀");
 });
 
+
 // Resume route
 const resumeRoutes = require('./routes/resume');
 app.use('/api/resume', resumeRoutes);
